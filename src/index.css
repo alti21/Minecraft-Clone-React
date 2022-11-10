@@ -27,6 +27,7 @@ body {
   font-size: 40px;
 }
 
+/* Helper Classes */
 .flex {
   display: flex;
 }
