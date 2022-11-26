@@ -7,9 +7,9 @@ export const Ground = () => {
     // the reference will be placed on the mesh that Cannon will control
     const [ref] = usePlane(() => ({
         // this callback has properties of the plane
-        // unit is radians, not degrees, here we rotate plane by -45 degrees
-        // since Pi / 4 is 45 degrees
-        rotation: [ -Math.PI / 4 , 0, 0], 
+        // unit is radians, not degrees, here we rotate plane by -90 degrees
+        // since Pi / 2 is 90 degrees
+        rotation: [ -Math.PI / 2 , 0, 0], 
         position: [0,0,0]
     }))
 
