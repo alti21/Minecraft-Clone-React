@@ -2,8 +2,13 @@ import { useSphere } from "@react-three/cannon";
 import { useFrame, useThree } from "@react-three/fiber"
 import { useEffect, useRef } from "react";
 import { Vector3 } from "three";
+import { useKeyboard } from "../hooks/useKeyboard";
 
 export const Player = () => {
+    // we can use the actions for keyboard presses to control the player's 
+    // movements
+    const actions = useKeyboard();
+
     // the player needs a camera
     const { camera } = useThree(); 
     // geometry to represent the player (geometry that can collide with other
