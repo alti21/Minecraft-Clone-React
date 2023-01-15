@@ -4,10 +4,14 @@ import { useEffect, useRef } from "react";
 import { Vector3 } from "three";
 import { useKeyboard } from "../hooks/useKeyboard";
 
+const JUMP_FORCE = 4;
+const SPEED = 4;
+
 export const Player = () => {
     // we can use the actions for keyboard presses to control the player's 
     // movements
-    const actions = useKeyboard();
+    const { moveForward, moveBackward, moveRight, moveLeft, jump } = useKeyboard();
+    // desctructure so we only use the properties we need
 
     // the player needs a camera
     const { camera } = useThree(); 
@@ -45,6 +49,42 @@ export const Player = () => {
     useFrame(() => {
         // we basically glue the camera to our position referencne pos
         camera.position.copy(new Vector3(pos.current[0], pos.current[1], pos.current[2]));
+        
+        const direction = new Vector3();
+
+        // vector for forward/backward speed and another vector for side 
+        // (left/right) speed
+        // here, if we press forward and backward movement keys at the same time,
+        // the movement will cancel out, so the player will not move in that case
+        const frontVector = new Vector3(
+                    0, 
+                    0, 
+                    (moveBackward ? 1 : 0) - (moveForward ? 1 : 0)
+        );
+        // same with side vector, if we hold left and right movement keys at same 
+        // time, the player will not move at all (the movements cancel out)
+        const sideVector = new Vector3(
+                    (moveLeft ? 1 : 0) - (moveRight ? 1 : 0), 
+                    0, 
+                    0
+        );
+
+        // make sure front and side vectors are correct
+        // in relation to the camera
+        direction
+        .subVectors(frontVector, sideVector)
+        .normalize()
+        .multiplyScalar(SPEED) // determine player speed
+        .applyEuler(camera.rotation)
+
+        // player can only move in x direction and z direction
+        api.velocity.set(direction.x, vel.current[1], direction.z)
+
+        // make the player jump on space bar press
+        if(jump && Math.abs(vel.current[1]) < 0.05) {
+            api.velocity.set(vel.current[0], JUMP_FORCE, vel.current[2]);
+        }
+    
     })
     // now we have a camera that follows pos (the reference to the player's position)
 

@@ -44,7 +44,7 @@ export const useKeyboard = () => {
                 })
             })
         }
-    }, [])
+    }, []) // empty array means callback is memoized once and callback is returned
 
     // will set the action to false since the action occurs once the player
     // releases a key
@@ -69,6 +69,8 @@ export const useKeyboard = () => {
             document.removeEventListener('keyup', handleKeyUp);
         }
     }, [handleKeyDown, handleKeyUp])
+    // this useEffect will only run once, on component's 1st render, since
+    // that is the only time when handleKeyDown and handleKeyUp are changed
 
     return actions;
 }
